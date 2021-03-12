@@ -1,0 +1,119 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- Specifying base package of the Components like Controller, Service, DAO -->
+	<context:component-scan	base-package="com.lowes" />
+		
+	<!-- Getting Database properties -->
+	<context:property-placeholder location="classpath:application.properties" />
+	<bean id="notificacionController" class="com.lowes.scheduler.NotificacionController"></bean>
+	<bean id="importarCMController" class="com.lowes.scheduler.ImportarCMController"></bean>
+	
+	<mvc:annotation-driven />
+	
+	<!-- Specifying the Resource location to load JS, CSS, Images etc -->
+	<mvc:resources mapping="/resources/**" location="/WEB-INF/resources/theme1/" />
+	<mvc:resources mapping="/archivos/**" location="${lws.pathFile}" />
+	
+	
+	<!-- View Resolver -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/pages/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	 <bean id="multipartResolver"
+        class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+ 
+         <!-- setting maximum upload size -->
+        <property name="maxUploadSize" value="1000000" />
+ 
+    </bean>
+
+	<!-- DataSource -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="${database.driverClass}" />
+		<property name="jdbcUrl" value="${database.url}" />
+		<property name="user" value="${database.username}" />
+		<property name="password" value="${database.password}" />
+
+		<property name="acquireIncrement" value="${connection.acquireIncrement}" />
+		<property name="minPoolSize" value="${connection.minPoolSize}" />
+		<property name="maxPoolSize" value="${connection.maxPoolSize}" />
+		<property name="maxIdleTime" value="${connection.maxIdleTime}" />
+	</bean>
+
+	<!-- Hibernate SessionFactory -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+				<prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+			</props>
+		</property>
+		<property name="packagesToScan" value="com.lowes.entity"></property>
+	</bean>
+
+	<!-- Transaction -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<!-- Configuring interceptors based on URI -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**" />
+            <mvc:exclude-mapping path="/login"/>
+            <bean class="com.lowes.handler.RequestProcessingInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+    
+    
+    <!-- EMAIL -->
+	<bean id="emailSender" class="mx.adinfi.mail.sender.EmailSender" scope="prototype">
+		<property name="mailSender">
+			<bean class="org.springframework.mail.javamail.JavaMailSenderImpl">
+				<property name="host" value="${mail.host}" />
+				<property name="port" value="${mail.port}" />
+				<property name="username" value="${mail.username}" />
+				<property name="password" value="${mail.password}" />
+				<property name="javaMailProperties">
+					<props>
+						<prop key="mail.smtp.auth">${mail.smtp.auth}</prop>
+						<prop key="mail.smtp.ssl.enable">${mail.smtp.ssl.enable}</prop>
+						<prop key="mail.smtp.starttls.enable">${mail.smtp.starttls.enable}</prop>
+						<prop key="mail.debug">${mail.debug}</prop>
+						<prop key="mail.smtp.quitwait">false</prop>
+						<prop key="mail.mime.charset">UTF-8</prop>
+					</props>
+				</property>
+			</bean>
+		</property>
+		<property name="simpleMailMessage">
+			<bean class="org.springframework.mail.SimpleMailMessage">
+				<property name="from" value="${mail.username}" />
+				<property name="subject" value="${mail.subject}" />
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="mailSenderPostProcessor" class="mx.adinfi.mail.sender.JavaMailSenderPostProcessor" scope="prototype">
+		<property name="authRequired" value="${mail.smtp.auth}" />
+	</bean>
+    
+</beans>

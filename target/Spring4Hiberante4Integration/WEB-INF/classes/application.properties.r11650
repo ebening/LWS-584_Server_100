@@ -1,0 +1,106 @@
+######  DB2  #######
+
+# Database related properties
+database.driverClass=com.ibm.db2.jcc.DB2Driver
+
+#AMBIENTE DESARROLLO ADINFI#
+#database.url=jdbc:db2://192.168.10.165:50000/LWS584:currentSchema=LWS584;
+#database.username=db2inst1
+#database.password=Passw0rd
+#database.schema=LWS584
+
+#AMBIENTE DE PRUEBAS REPLICA LOWES#
+database.url=jdbc:db2://192.168.10.165:50000/LWSNEW:currentSchema=LWS584;
+database.username=db2inst1
+database.password=Passw0rd
+database.schema=LWS584
+
+#AMBIENTE DE PRODUCCION LOWES#
+#database.url=jdbc:db2://172.25.125.136:64100/LWS584:currentSchema=LWS584;
+#database.username=icmadm
+#database.password=QNmEy502
+#database.schema=LWS584
+
+
+#Hibernate related properties
+hibernate.dialect=org.hibernate.dialect.DB2Dialect
+hibernate.hbm2ddl.auto=update
+hibernate.show_sql=false
+hibernate.format_sql=true
+
+#Connection pool related properties
+connection.acquireIncrement=2
+connection.minPoolSize=20
+connection.maxPoolSize=50
+connection.maxIdleTime=600
+
+#Cron Expressions
+cron.anticipo=0 40 17 ? * MON-FRI
+cron.icm=0 26 16 ? * MON-FRI
+
+##### APP #####
+
+app.idioma = es
+app.idioma2 = en
+
+
+#### Web Service Client (Valida Factura) ####
+ws.valida.factura.endpoint=https://dmbf01.diverza.com/bfcorpvalidaenlineaws
+ws.valida.factura.token=813923f5-cb2c-4c1e-965b-d1b75c03fb59
+
+### PATH RECURSOS/ARCHIVOS DE LAS SOLICITUDES ###
+#lws.path = C:/lws/
+#lws.pathFile  = file:///C:/lws/
+#lws.pathImagenesPerfil = C:/lws/pp/
+
+###CM PROPERTIES###
+icm.library=icmnlsdb
+icm.admin=icmadmin
+icm.password=Passw0rd
+icm.schema=SCHEMA=icmadmin
+icm.server.file=ICMSERVERSFILE=(/lws/cmbicmsrvs.ini)
+cm.itemType.1=LWS_SOLICITUD
+cm.itemType.2=LWS_DOCUMENTO
+cm.itemType.3=LWS_DOCUMENTO_SOPORTE
+cm.itemType.4=LWS_DOCUMENTO_DEPOSITO
+
+
+
+
+#linux
+lws.path = /lws/
+lws.pathFile  = file:////lws/
+lws.pathImagenesPerfil = /lws/pp/
+
+#Configuracion de correo electronico 
+mail.host=smtp.alestraune.net.mx
+mail.port=587
+mail.username=noreply@adinfi.com
+mail.password=adinfi123
+mail.smtp.auth=true
+mail.subject=Lowes
+mail.smtp.ssl.enable=false
+mail.smtp.starttls.enable=true
+mail.debug=true
+
+#Configuracion de correo electronico 
+#mail.host=smtp.gmail.com
+#mail.port=587
+#mail.username=pruebaadinfi@gmail.com
+#mail.password=adminet01
+#mail.smtp.auth=true
+#mail.subject=Lowes
+#mail.smtp.ssl.enable=false
+#mail.smtp.starttls.enable=true
+#mail.debug=true
+
+#Configuracion de correo electronico 
+#mail.host=MSMSGEX10WPRD01.lowes.com
+#mail.port=993
+#mail.username=pruebaadinfi@gmail.com
+#mail.password=adminet01
+#mail.smtp.auth=true
+#mail.subject=Lowes
+#mail.smtp.ssl.enable=true
+#mail.smtp.starttls.enable=true
+#mail.debug=true

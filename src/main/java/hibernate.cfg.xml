@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.connection.driver_class">COM.ibm.db2.jdbc.app.DB2Driver</property>
+        <property name="hibernate.connection.password">Passw0rd</property>
+        <property name="hibernate.connection.url">jdbc:db2://192.168.10.165:50000/LWS584:retrieveMessagesFromServerOnGetMessage=true;</property>
+        <property name="hibernate.connection.username">db2inst1</property>
+        <property name="hibernate.default_schema">LWS584</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.DB2Dialect</property>
+    </session-factory>
+</hibernate-configuration>
